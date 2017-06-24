@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.naming.NamingException;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -142,6 +143,12 @@ public class UserDAO {
             
         
         return false;
+    }
+    
+    public String checkLoginUser(HttpSession session) {
+        String loginUser = (String) session.getAttribute("USERNAME");
+
+        return loginUser;
     }
     
 }

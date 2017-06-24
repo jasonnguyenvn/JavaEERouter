@@ -43,7 +43,7 @@ public class SearchServlet extends HttpServlet {
         
         
         try {
-            String searchValue = request.getParameter("txtSearchVallue");
+            String searchValue = request.getParameter("txtSearchValue");
             
             if (searchValue.trim().length() > 0) {
                 UserDAO userDAO = new UserDAO();

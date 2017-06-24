@@ -6,18 +6,26 @@
 
 package com.jasonnguyenvn.JavaEERouterWebApp.servlets;
 
+import com.jasonnguyenvn.JavaEERouterWebApp.DAOs.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Hau
  */
 public class DeleteRecordServlet extends HttpServlet {
+    private final String deleteErrorPage = "deleteError.html";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,9 +40,35 @@ public class DeleteRecordServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        
+        String url = deleteErrorPage;
         try {
+            String username = request.getParameter("pk").trim();
+            HttpSession session = request.getSession();
             
+            if (session != null) {
+                UserDAO userDAO = new UserDAO();
+                
+                String loginUser = userDAO.checkLoginUser(session);
+                if (loginUser != null) {
+                    String searchValue = request.getParameter("lastSearchValue");
+                    if (!loginUser.equals(username)) {
+                        boolean result = userDAO.deleteRecord(username);
+                        if (result) {
+                            url = "search?btnAction=Search"
+                                    + "&txtSearchValue="
+                                    + searchValue;
+                        }
+                    }
+                }
+            }
+            
+        } catch (NamingException ex) {
+            Logger.getLogger(DeleteRecordServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(DeleteRecordServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
+            response.sendRedirect(url);
             out.close();
         }
     }

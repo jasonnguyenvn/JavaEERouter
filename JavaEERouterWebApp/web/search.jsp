@@ -19,11 +19,11 @@
         </font>
         <h1>Search Page</h1>
         <form action="search">
-            <input type="text" name="txtSearchVallue" 
-                   value="${param.txtSearchVallue}">
+            <input type="text" name="txtSearchValue" 
+                   value="${param.txtSearchValue}">
             <input type="submit" value="Search" name="btnAction">
         </form>
-        <c:set var="searchValue" value="${param.txtSearchVallue}" />
+        <c:set var="searchValue" value="${param.txtSearchValue}" />
         <c:if test="${not empty searchValue}">
             <c:set var="result" value="${requestScope.SEARCH_RESULT}"/>
             
