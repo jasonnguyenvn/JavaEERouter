@@ -9,6 +9,10 @@ package com.jasonnguyenvn.JavaEERouterWebApp.servlets;
 import com.jasonnguyenvn.JavaEERouterWebApp.DAOs.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +40,6 @@ public class UpdateRecordServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         String url = updateErrorPage;
         try {
-            String username = request.getParameter("pk").trim();
             HttpSession session = request.getSession();
             
             if (session != null) {
@@ -44,10 +47,28 @@ public class UpdateRecordServlet extends HttpServlet {
                 
                 String loginUser = userDAO.checkLoginUser(session);
                 if (loginUser != null) {
-                
+                    String username = request.getParameter("txtUsername");
+                    String password = request.getParameter("txtPassword");
+                    String admin = request.getParameter("chkAdmin");
+                    boolean isAdmin = admin != null;
+                    
+                    String searchValue = request.getParameter("lastSearchValue");
+                    
+                    boolean result = userDAO.updatePassAndRole(username, 
+                            password, isAdmin);
+                    if (result) {
+                        url = "search?btnAction=Search"
+                                + "&txtSearchValue="
+                                + searchValue;
+                    }
                 }
             }
+        } catch (NamingException ex) {
+            Logger.getLogger(UpdateRecordServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(UpdateRecordServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
+            response.sendRedirect(url);
             out.close();
         }
     }

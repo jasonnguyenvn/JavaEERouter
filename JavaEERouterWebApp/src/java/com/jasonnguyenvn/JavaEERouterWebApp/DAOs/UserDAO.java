@@ -163,7 +163,7 @@ public class UserDAO {
             if (con != null) {
                 String sql = "UPDATE [user] "
                         + "SET password=?, isAdmin=?"
-                        + "WHERE username=?";
+                        + " WHERE username=?";
                 
                 stm = con.prepareStatement(sql);
                 stm.setString(1, password);
