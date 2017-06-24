@@ -14,16 +14,16 @@ public class UserDTO {
     private String username;
     private String password;
     private String lastname;
-    private boolean isAdmin;
+    private boolean admin;
 
     public UserDTO() {
     }
 
-    public UserDTO(String username, String password, String lastname, boolean isAdmin) {
+    public UserDTO(String username, String password, String lastname, boolean admin) {
         this.username = username;
         this.password = password;
         this.lastname = lastname;
-        this.isAdmin = isAdmin;
+        this.admin = admin;
     }
 
     public String getUsername() {
@@ -50,13 +50,14 @@ public class UserDTO {
         this.lastname = lastname;
     }
 
-    public boolean isIsAdmin() {
-        return isAdmin;
+    public boolean isAdmin() {
+        return admin;
     }
 
-    public void setIsAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
+    
     
     
 }
