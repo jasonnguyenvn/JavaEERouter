@@ -105,4 +105,43 @@ public class UserDAO {
         
     }
     
+    
+    public boolean deleteRecord(String username) 
+            throws NamingException, SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        
+        try {
+            con = DBUtilities.makeConnection();
+            
+            if (con != null) {
+                String sql = "DELETE FROM [user] WHERE username=?";
+                
+                stm = con.prepareStatement(sql);
+                stm.setString(1, username);
+                
+                int row = stm.executeUpdate();
+                
+                if (row > 0) {
+                    return true;
+                }
+            }
+            
+        } finally {
+             if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+            
+        
+        return false;
+    }
+    
 }
