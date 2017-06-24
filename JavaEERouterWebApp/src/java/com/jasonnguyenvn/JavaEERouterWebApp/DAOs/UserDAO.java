@@ -6,11 +6,14 @@
 
 package com.jasonnguyenvn.JavaEERouterWebApp.DAOs;
 
+import com.jasonnguyenvn.JavaEERouterWebApp.DTOs.UserDTO;
 import com.jasonnguyenvn.Utilities.DBUtilities;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.naming.NamingException;
 
 /**
@@ -50,6 +53,56 @@ public class UserDAO {
         
         
         return false;
+    }
+    
+    private List<UserDTO> listAccounts;
+
+    public List<UserDTO> getListAccounts() {
+        return listAccounts;
+    }
+    
+    public void searchLastname(String searchValue) 
+            throws NamingException, SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBUtilities.makeConnection();
+            if (con != null) {
+                String sql = "SELECT * FROM [user] WHERE lastname LIKE ?";
+                
+                stm = con.prepareStatement(sql);
+                stm.setString(1, "%" + searchValue + "%");
+                
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    String username = rs.getString("username");
+                    String password = rs.getString("password");
+                    String lastname = rs.getString("lastname");
+                    boolean isAdmin = rs.getBoolean("isAdmin");
+                    
+                    UserDTO dto  = new UserDTO(username, password, lastname, 
+                            isAdmin);
+                    
+                    if (listAccounts == null) {
+                        listAccounts = new ArrayList<UserDTO>();
+                    }
+                    this.listAccounts.add(dto);
+                }
+            }
+        } finally {
+             if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        
     }
     
 }
