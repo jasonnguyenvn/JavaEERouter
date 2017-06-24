@@ -42,7 +42,9 @@
                     </thead>
                     <tbody>
                         <c:forEach var="dto" items="${result}" varStatus="counter">
-                            
+                           
+                                    <form action="updateRecord"> 
+                
                             <tr>
                                 <td>
                                     ${counter.count}
@@ -80,7 +82,7 @@
                                            value="Update">
                                 </td>
                             </tr>
-                            
+                                    </form>
                         </c:forEach>
                     </tbody>
                 </table>

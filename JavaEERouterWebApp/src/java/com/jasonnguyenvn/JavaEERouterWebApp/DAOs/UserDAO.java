@@ -151,4 +151,44 @@ public class UserDAO {
         return loginUser;
     }
     
+    public boolean updatePassAndRole(String username, String password, 
+            boolean isAdmin) throws NamingException, SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        
+        try {
+            con = DBUtilities.makeConnection();
+            
+            if (con != null) {
+                String sql = "UPDATE [user] "
+                        + "SET password=?, isAdmin=?"
+                        + "WHERE username=?";
+                
+                stm = con.prepareStatement(sql);
+                stm.setString(1, password);
+                stm.setBoolean(2, isAdmin);
+                stm.setString(3, username);
+                
+                int row = stm.executeUpdate();
+                
+                if (row > 0) {
+                    return true;
+                }
+            }
+            
+        } finally {
+             if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return false;
+    }
+    
 }
